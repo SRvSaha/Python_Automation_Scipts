@@ -23,7 +23,7 @@ def corpus_clean(lines):
         # Only when it's when it is in the range of Malayalam Unicode and also
         # when space is there between words or the punctuations
         for i in line:
-            if ord(i) >= 3328 and ord(i) <= 3455 or ord(i) >= 32 and ord(i) <= 47 or ord(i) >= 58 and ord(i) <= 63:
+            if ord(i) >= ord('\u0D00') and ord(i) <= ord('\u0D7F') or ord(i) >= 32 and ord(i) <= 47 or ord(i) >= 58 and ord(i) <= 63:
                 if ord(i) >= 33 and ord(i) <= 47 or ord(i) >= 58 and ord(i) <= 63:
                     i = " " # Remove all punctuations with " "
                 string += i
