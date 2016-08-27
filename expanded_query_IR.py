@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
+#
+# @author     : SRvSaha
+# Filename    : expanded_query_IR.py
+# Timestamp   : 16:00 27-August-2016 (Saturday)
+# Description : SCRIPT to extact all the expanded queries from IR Query
+# Requirement : Python 3, Word2vec, Gensim
+#
+
 import logging
 import sys
 import os
