@@ -11,7 +11,7 @@ filename = sys.argv[1]
 with open(filename) as f:
     lines = f.readlines()
 for line in lines[1:]:
-    file = line[:3]
+    file = line[:3]+".txt"
     output = line[4:]
     with open(file,'w') as f:
         f.write(output)
