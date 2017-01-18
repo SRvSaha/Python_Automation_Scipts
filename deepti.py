@@ -1,3 +1,54 @@
+'''
+
+#
+#   @author      : SRvSaha
+#   Filename     : deepti.py
+#   Timestamp    : 15:52 18-January-2017 (Wednesday)
+#   Description  : The script converts CSV file given in the format of
+
+(a)
+date1,long1,long2,long3.....
+lat1, 1,2,3,...
+lat2, 4,5,6,...
+lat3, 7,8,9,...
+.
+.
+.
+date2,long1,long2,long3.....
+lat1, 11,12,13,...
+lat2, 14,15,16,...
+lat3, 17,18,19,...
+.
+.
+.
+
+to this format :
+(b)
+date1,lat1,long1,1
+date1,lat1,long2,2
+date1,lat1,long2,3
+date1,lat2,long1,4
+.
+.
+.
+date2,lat1,long1,11
+date2,lat2,long1,12
+date2,lat3,long1,13
+...
+date2,lat2,long3,16
+date2,lat3,long1,17
+date2,lat3,long2,18
+....
+
+INPUT : Formatted CSV file as (a)
+OUTPUT : Formatted CSV file as (b)
+
+Requirements : Python3
+
+TO RUN : python3 deepti.py <INPUT.csv>
+'''
+
+
 import sys
 
 records = []
@@ -12,7 +63,7 @@ for i, item in enumerate(records):
         date.append((item, i))
 # print(date)
 header = "DATE,LATITUDE,LONGITUDE,RAINFALL\n"
-f_out = open("deepti_final.csv",'w')
+f_out = open("deepti_final.csv", 'w')
 f_out.write(header)
 for index in range(len(date) - 1):
     start = int(date[index][1])
