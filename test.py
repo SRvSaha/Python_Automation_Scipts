@@ -27,7 +27,10 @@ def get_actual_mapping_from_csv(filepath):
 	location = ""
 	with open(filepath) as f:
 		for line in f:
-			line = line.split(',') 
+			#print(line)
+			line = line.split('\t') 
+			if len(line) != 3:
+				print(line)
 			filename = line[0].strip()
 			filesize = int(line[1].strip())
 			location = line[2].strip()
@@ -56,7 +59,7 @@ def compare_filename(source_filename, target_filename):
 
 	if '_' in source_filename:
 		source_filename = source_filename[:source_filename.find('_')]+source_filename[source_filename.rfind('.'):]
-	print(source_filename, target_filename)
+	
 	if target_filename == source_filename:
 		return True
 	return False
@@ -71,7 +74,11 @@ def moveAndRename(source_directory, source_filename, destination_directory, dest
 	'''
 	if os.path.isdir(destination_directory) == False:
 		os.makedirs(destination_directory)
+	if '\\' in source_directory:
+		src_fullpath = source_directory + source_filename
 	src_fullpath = source_directory + '\\' + source_filename
+	if '\\' in destination_directory:
+		dst_fullpath = destination_directory + destination_filename
 	dst_fullpath = destination_directory + '\\' + destination_filename
 	shutil.move(src_fullpath, dst_fullpath)
 
@@ -84,7 +91,7 @@ def check_file_and_move(recovery_directory, actual_file_mapping,recovered_file_m
 	
 	for item_source in recovered_file_mapping:
 		for item_target in actual_file_mapping:
-			print(item_source, item_target)
+			
 			if item_source[1]==item_target[1]:
 				#print(item_source[1], item_target[1])
 				#print('Filesize Match')
@@ -105,8 +112,9 @@ def check_file_and_move(recovery_directory, actual_file_mapping,recovered_file_m
 
 
 if __name__ == "__main__":
-	PATH_TO_CSV = r"C:\Users\sauravsaha\Desktop\test.csv"
-	RECOVERY_DIRECTORY = r"C:\Users\sauravsaha\Desktop\Testing"
+	#moveAndRename(r'D:\RECOVER_PLURALSIGHT', '4. Demo- Implement Two-Factor Authentication Using a Custom Authentication Filter.mp4', 'E:\\PluralSight\\MISC\\PATH_AUTHORIZATION\\Spring Security- Authentication - Authorization - Building Effective Layers of Defense\\5. Adding Additional Layers for Authentication\\', '4. Demo- Implement Two-Factor Authentication Using a Custom Authentication Filter.mp4')
+	PATH_TO_CSV = r"C:\Users\srvsaha\Desktop\actual_mapping.tsv"
+	RECOVERY_DIRECTORY = r"D:\RECOVER_PLURALSIGHT"
 	actual_file_mapping = get_actual_mapping_from_csv(PATH_TO_CSV)
 	recovered_file_mapping = get_recovered_file_mapping(RECOVERY_DIRECTORY)
 	check_file_and_move(RECOVERY_DIRECTORY, actual_file_mapping, recovered_file_mapping)
