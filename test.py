@@ -1,5 +1,11 @@
 import os
 import shutil
+import logging
+
+logging.basicConfig(filename="Logs_generated.log", format='%(asctime)s %(message)s', filemode='w')
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO) 
 
 
 def max_size(item):
@@ -61,6 +67,7 @@ def moveAndRename(source_directory, source_filename, destination_directory, dest
 	Utility Method to Move a File from One Directory to Another. In case, the directory doesn't already exist,
 	directory is created and then the file is moved from source directory to the destination directory with
 	the name of the file  as the destination filename
+	conver to raw string
 	'''
 	if os.path.isdir(destination_directory) == False:
 		os.makedirs(destination_directory)
@@ -79,21 +86,22 @@ def check_file_and_move(recovery_directory, actual_file_mapping,recovered_file_m
 		for item_target in actual_file_mapping:
 			print(item_source, item_target)
 			if item_source[1]==item_target[1]:
-				print(item_source[1], item_target[1])
-				print('Filesize Match')
+				#print(item_source[1], item_target[1])
+				#print('Filesize Match')
+				logger.info("[INFO] Recovered file size matches actual file size for the file %s", item_source[0])
 				if compare_filename(item_source[0].strip(), item_target[0].strip()):
-					print('Filename Match')
+					
+					logger.info("[INFO] Recovered filename %s matches actual filename %s", item_source[0], item_target[0]) 
 					moveAndRename(recovery_directory, item_source[0].strip(),item_target[2], item_target[0].strip())
 					actual_file_mapping.remove(item_target)
-					print('Success')
+					logging.info('[INFO] Moving and renaming sucessful for %s', item_source[0])
 					break
 				else:
-					print('try more')
+					logging.info('[INFO] Recovered file %s does not match with name of any', item_source[0])
 			elif item_source[1] > item_target[1]:
-				print('no filesize match')
+				logging.warning('[WARNING] Recovered file %s does not match with size of any', item_source[0])
 				break
-			else:
-				print('Try next match')
+			
 
 
 if __name__ == "__main__":
@@ -101,18 +109,12 @@ if __name__ == "__main__":
 	RECOVERY_DIRECTORY = r"C:\Users\sauravsaha\Desktop\Testing"
 	actual_file_mapping = get_actual_mapping_from_csv(PATH_TO_CSV)
 	recovered_file_mapping = get_recovered_file_mapping(RECOVERY_DIRECTORY)
-	for item in actual_file_mapping:
-		print(item)
-	print()
-	for item in recovered_file_mapping:
-		print(item)
-	print()
 	check_file_and_move(RECOVERY_DIRECTORY, actual_file_mapping, recovered_file_mapping)
 
 '''
 TODO:
 1. Change the path of CSV and the Recovery Directory
 2. Test the whole Program on a simulated environment for 1000 files
-3. Remove all the debug statements of Print
+3. Remove all the debug statements of Print- DONE
 4. Run the Program in Actual System on full files
 '''
