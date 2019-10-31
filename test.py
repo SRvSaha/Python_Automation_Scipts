@@ -25,7 +25,7 @@ def get_actual_mapping_from_csv(filepath):
 	filename = ""
 	filesize = ""
 	location = ""
-	with open(filepath) as f:
+	with open(filepath, encoding='utf8') as f:
 		for line in f:
 			#print(line)
 			line = line.split('\t') 
@@ -57,7 +57,7 @@ def compare_filename(source_filename, target_filename):
 	Utility method that compares the filename from the recovered directory to the filename mapping csv to check if the source file after normalization is same as that of the target filename.
 	'''
 
-	if '_' in source_filename:
+	if '_' in source_filename and str.isdigit(source_filename[source_filename.find('_')+1:source_filename.rfind('.')]):
 		source_filename = source_filename[:source_filename.find('_')]+source_filename[source_filename.rfind('.'):]
 	
 	if target_filename == source_filename:
@@ -70,16 +70,19 @@ def moveAndRename(source_directory, source_filename, destination_directory, dest
 	Utility Method to Move a File from One Directory to Another. In case, the directory doesn't already exist,
 	directory is created and then the file is moved from source directory to the destination directory with
 	the name of the file  as the destination filename
-	conver to raw string
+	convert to raw string
 	'''
 	if os.path.isdir(destination_directory) == False:
 		os.makedirs(destination_directory)
-	if '\\' in source_directory:
+	if source_directory.endswith("\\") or source_directory.endswith("\\\\"):
 		src_fullpath = source_directory + source_filename
-	src_fullpath = source_directory + '\\' + source_filename
-	if '\\' in destination_directory:
+	else:
+		src_fullpath = source_directory + '\\' + source_filename
+	if destination_directory.endswith("\\") or destination_directory.endswith("\\\\"):
 		dst_fullpath = destination_directory + destination_filename
-	dst_fullpath = destination_directory + '\\' + destination_filename
+	else:
+		#dst_fullpath = destination_directory + '\\' + destination_filename
+		dst_fullpath = os.path.join(destination_directory, destination_filename)
 	shutil.move(src_fullpath, dst_fullpath)
 
 
@@ -112,7 +115,7 @@ def check_file_and_move(recovery_directory, actual_file_mapping,recovered_file_m
 
 
 if __name__ == "__main__":
-	#moveAndRename(r'D:\RECOVER_PLURALSIGHT', '4. Demo- Implement Two-Factor Authentication Using a Custom Authentication Filter.mp4', 'E:\\PluralSight\\MISC\\PATH_AUTHORIZATION\\Spring Security- Authentication - Authorization - Building Effective Layers of Defense\\5. Adding Additional Layers for Authentication\\', '4. Demo- Implement Two-Factor Authentication Using a Custom Authentication Filter.mp4')
+	#moveAndRename(r'D:\RECOVER_PLURALSIGHT', '1. Cross Site Scripting (XSS) Attacks.mp4', 'E:\\PluralSight\\MISC\\PATH_SYSTEM_DESIGN_PATTERNS\\Configuring Security Headers in ASP.NET and ASP.NET Core Applications\\2. Controlling the Browser to Protect Against Cross Site Scripting (XSS) and Click-Jacking Attacks\\', '1. Cross Site Scripting (XSS) Attacks.mp4')
 	PATH_TO_CSV = r"C:\Users\srvsaha\Desktop\actual_mapping.tsv"
 	RECOVERY_DIRECTORY = r"D:\RECOVER_PLURALSIGHT"
 	actual_file_mapping = get_actual_mapping_from_csv(PATH_TO_CSV)
